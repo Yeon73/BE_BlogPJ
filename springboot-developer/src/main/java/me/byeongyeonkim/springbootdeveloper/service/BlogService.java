@@ -1,8 +1,10 @@
 package me.byeongyeonkim.springbootdeveloper.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.byeongyeonkim.springbootdeveloper.domain.Article;
 import me.byeongyeonkim.springbootdeveloper.dto.AddArticleRequest;
+import me.byeongyeonkim.springbootdeveloper.dto.UpdateArticleRequest;
 import me.byeongyeonkim.springbootdeveloper.repository.BlogRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,16 @@ public class BlogService {
     // 블로그 글 삭제 메서드
     public void delete(long id) {
         blogRepository.deleteById(id);
+    }
+
+    // 블로그 글 수정 메서드
+    @Transactional  // 트랜잭션 메서드
+    public Article update(long id, UpdateArticleRequest request) {
+        Article article = blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+
+        article.update(request.getTitle(), request.getContent());
+
+        return article;
     }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity  // 엔티티로 지정
 @Getter
+@Table(name = "article")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article {
     @Id  // id 필드를 기본키로 지정

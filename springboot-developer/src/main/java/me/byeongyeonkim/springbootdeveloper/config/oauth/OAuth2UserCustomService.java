@@ -31,14 +31,25 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
+        String uniqueNickname = generateUniqueNickname(name); // 고유 닉네임 생성
 
-        User user = userRepository.findByEmail(email)
-                .map(entity -> entity.update(name))
-                .orElse(User.builder()
-                        .email(email)
-                        .nickname(name)
-                        .build());
+        return userRepository.findByEmail(email)
+                .map(entity -> entity.update(name)) // 기존 사용자 업데이트
+                .orElseGet(() -> userRepository.save( // 새로운 사용자 저장
+                        User.builder()
+                                .email(email)
+                                .nickname(uniqueNickname)
+                                .build()
+                ));
+    }
 
-        return userRepository.save(user);
+    private String generateUniqueNickname(String baseName) {
+        String nickname = baseName;
+        int counter = 1;
+        while (userRepository.existsByNickname(nickname)) {
+            nickname = baseName + counter; // 중복 시 숫자 추가
+            counter++;
+        }
+        return nickname;
     }
 }

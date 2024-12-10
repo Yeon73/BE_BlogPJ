@@ -1,20 +1,24 @@
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # spring data jpa 설정
   jpa:
-    # 전송 쿼리 확인
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
 
-    #테이블 생성 후에 data.sql 실행
-    defer-datasource-initialization: true
-
   datasource: # 데이터베이스 정보 추가
-    url: jdbc:h2:mem:testdb
-    username: sa
-  h2: # H2 콘솔 활성화
-    console:
-      enabled: true
+    url: ....
+    username: ....
+    password: ....
+    driver-class-name: com.mysql.cj.jdbc.Driver
   security:
     oauth2:
       client:
